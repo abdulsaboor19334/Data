@@ -1,0 +1,26 @@
+{% load static %}
+<div class="sidebar">
+  <!--
+        Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red"
+    -->
+  <div class="sidebar-wrapper">
+    <ul class="nav">
+      <li class="active">
+        <a href="./dashboard.html">
+          <i class="tim-icons icon-chart-pie-36"></i>
+          <p>Dashboard</p>
+        </a>
+      </li>
+      <li>
+        <button id="get" class="btn btn-block"> DATA! </button>
+      </li>
+      <li>
+        <div class="fb-login-button" data-size="large" data-button-type="continue_with" data-layout="default"
+          data-auto-logout-link="true" data-use-continue-as="false" data-width="" scope="public_profile,email"
+          onlogin="checkLoginState();"></div>
+      </li>
+    </ul>
+    </fb:login-button>
+  </div>
+</div>
+<script src="{% static 'api.js' %}"></script>

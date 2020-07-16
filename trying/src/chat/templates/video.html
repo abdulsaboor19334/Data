@@ -1,0 +1,30 @@
+{%  extends 'base.html' %}
+
+{% for vid in video %}
+<div id="list-example" class="list-group">
+    <a class="list-group-item list-group-item-action" href="#{{ vid.name }}">{{ vid.name }}</a>
+  </div>
+  <div data-spy="scroll" data-target="#list-example" data-offset="0" class="scrollspy-example">
+  </div>
+
+{% endfor %}
+
+{%  block content %}
+
+
+
+{% for vid in video %}
+<div class="card" style="width: 18rem;">
+        <iframe width="420" height="315"
+        src="http://www.youtube.com/embed/CpNnBoGVOxI">
+        </iframe>
+    <div class="card-body">
+        <h5 class="card-title"><a href="#{{ vid.name }}">{{vid.name}}</a></h5>
+        <p class="card-text">{{vid.detail}}</p>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+    </div>
+</div>
+
+{% endfor %}
+
+{%  endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<br />
+<br />
+<br />
+<br />
+<div class="accordion" id="accordionExample">
+    {% for exercise in exe   %}
+    <div class="card">
+    <div class="card-header" id="{{exercise.exercise_number}}">
+      <h2 class="mb-0" style="position:relative;">
+       {{ exercise.name }}
+        <button class="btn btn-primary"style="position:absolute; left:1200px;" type="button" data-toggle="collapse" data-target="#{{exercise.name}}" aria-expanded="false" aria-controls="{{ exercise.name }}">
+          show solution
+        </button>
+      </h2>
+    </div>
+    {% if exercise.chapter.book in request.user.library.books.all %}
+    <div id="{{ exercise.name }}" class="collapse" aria-labelledby="{{exercise.exercise_number}}" data-parent="#accordionExample">
+      <div class="card-body">
+            <img src="{{exercise.chapter.book.cover.url}}" alt="beach" width="100%" height="100%">
+      </div>
+    </div>
+    {% else %}
+    <div id="{{ exercise.name }}" class="collapse" aria-labelledby="{{exercise.exercise_number}}" data-parent="#accordionExample">
+        <div class="card-body">
+        <h3 class="text-center"> you dont have acess to this book's solutions <a href="#">Click now to purchase</a></h>
+        <img src="{% static 'lock.png' %}" alt="beach" width="200" height="200">
+      </div>
+    </div>
+    {% endif %}
+  </div>
+  
+    {% endfor %}
+</div>    
+
+
+{% endblock content %}

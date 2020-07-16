@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<br />
+<br />
+<br />
+<br />
+<style>
+
+</style>
+{% for book in books %}
+<center>
+<div class="row featurette col-md-10" style="border:1px; border-style:solid; background:#E1E5E4;box-shadow: 5px 10px;">
+    <div class="col-md-5 offset-md-1">
+    <h2 class="featurette-heading"style="text-decoration:underline;">{{ book.name }}</h2>
+    <p><span class="text-muted" style="font-size:22px;">By: {{ book.author.name }}</span></p>
+    <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+    <a href="{% url 'books:detail' book_slug=book.slug %}"><button type="button" class="btn btn-info btn-lg">Details</button></a>
+    <a href="#"><button type="button" class="btn btn-info btn-lg">Add to Cart</button></a>
+    </div>
+    <div class="col-md-2 offset-md-2">
+        <img src="{{ book.cover.url }}" alt="beach" width="300" height="300">
+    </div>
+</div>
+</center>
+    <br />
+
+    <br />
+
+{% endfor %}
+{% endblock content %}

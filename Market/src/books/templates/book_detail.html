@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<br />
+<br />
+<br />
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <!-- Heading Row -->
+    <div class="row align-items-center my-5">
+      <div class="col-lg-7">
+        <img class="col-md-7 offset-md-2"width="300" height="500" src="{{ book.cover.url }}" alt="">
+      </div>
+      <!-- /.col-lg-8 -->
+      <div class="col-lg-5">
+        <h1 class="font-weight-light">{{book.name}}</h1>
+        <p>{{ book.detail }}</p>
+        {% if book in request.user.userlibrary.books.all %}
+        <a class="btn btn-primary" href="#">Read <i class="fa fa-book" aria-hidden="true"></i></a>
+        {% else %}
+        <a class="btn btn-primary btn-lg" href="#">Buy acess to this book <i class="far fa-credit-card \"></i></a>
+        <a class="btn btn-primary btn-lg" href="#">Add to cart   <i class="fas fa-cart-plus"></i></a>
+        {% endif %}
+      </div>
+      <!-- /.col-md-4 -->
+    </div>
+    <hr />
+    <hr />
+    <br />
+    <!-- /.row -->
+    <h2 class="text-center"> Chpaters</h2>
+    <hr />
+    <br />
+    {% for chapter in chapters %}
+    <div class="col-md-13">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{ chapter.name }}</h5>
+          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+        <p>  
+          <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#{{ chapter.name}}" aria-expanded="false" aria-controls="collapseExample">
+          View chapter details
+          </button>
+        </p>
+        <div class="collapse" id="{{ chapter.name}}">
+          <div class="card card-body">
+            <h5> {{ chapter.chapter_number }} : {{ chapter.name }} </h5>
+            <a class="btn btn-primary col-md-5" href="{% url 'books:exercises' book_slug=book.slug chapter_number=chapter.chapter_number %}">view exercises</a>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    <!-- Call to Action Well -->
+    <div class="card text-white bg-secondary my-5 py-4 text-center">
+      <div class="card-body">
+        <p class="text-white m-0">Buy books at Geeks.com to avail exciting discounts on your favourite books</p>
+      </div>
+    </div>
+    
+{% endblock content %}

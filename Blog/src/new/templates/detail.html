@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<style>
+.container {
+  text-align: center;
+}
+.card{
+  display: inline-block;
+}
+</style> 
+<div class="container text-center">
+  <div class="card" style="width: 60rem;">
+    <div class="card-body">
+    <img src = "{{ obj.thumbnail.url }}"width="250" height="150">
+      <hr />
+      <h5 class="card-title"> {{ obj.title }} </h5>
+      <h6 class="card-subtitle mb-2 text-muted"> Author: {{obj.author}} </h6>
+        <br />
+      <p class="card-text">{{ obj.content}}</p>
+      <a href="#" class="card-link">Card link</a>
+      <a href="#" class="card-link">Another link</a>
+    </div>
+    <br />
+<hr />
+<center>
+<div style="background:#9AA8A5;">
+<h5 class='comments text-center'>Comments</h5>
+<hr />
+<form method="POST"> {% csrf_token %}
+  {{ form|crispy }}
+  <button type="submit" class="btn btn-info">Post</button>
+</form>
+{% for comment in comments %}
+<div class='col'>
+  <div class="card" style=" width: 60rem;">
+    <a href='#'>{{comment.user}}</a>
+    <div class="card-body" style="box-shadow:inset 2px 5px 2px #555;">
+      {{comment.content}}
+    </div>
+    <small>{{comment.timestamp}}</small>
+  </div>
+</div>
+{% endfor %}
+</div>
+</center>
+{% endblock content %}
+  </div>
+</div>
+
+
+
+
+
+
