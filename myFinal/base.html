@@ -1,0 +1,117 @@
+<script>
+    function checkLoginState() {
+        FB.getLoginStatus(function (response) {
+            statusChangeCallback(response);
+        });
+    }
+</script>
+
+
+
+
+
+<script>
+    window.fbAsyncInit = function () {
+        FB.init({
+            // put your app id here remove my app id  
+            appId: '1004215303383181',
+            cookie: true,
+            xfbml: true,
+            version: 'v7.0',
+            fileUpload: true,
+        });
+
+
+        FB.getLoginStatus(function (response) {
+            statusChangeCallback(response);
+        });
+
+    };
+    // below this comment is the main part where you do your stuff
+    function statusChangeCallback(response1) {
+        if (response1.status === 'connected') {
+            var accessToken = response1.authResponse.accessToken;
+            FB.api(
+                '/me',
+                'GET',
+                {
+                    "fields": "id,name,email",
+                    access_token: accessToken
+                },
+                // this shows your facebook profile pic on the topright corner when you login 
+                function (response) {
+                    document.getElementById('ProfilePhoto').setAttribute('src', "https://graph.facebook.com/" + response.id + "/picture?type=square");
+                }
+            );
+            //  this here is where you get the data about the pages 
+            FB.api(
+                '/me/accounts',
+                'GET',
+                { 'fields': 'fan_count, name, access_token' },
+                function (response) {
+                    // for each page that the user has this step creates a button 
+                    var buttons = response.data.forEach((element) => document.getElementById('side-bar').innerHTML += `<a class='btn btn-danger btn-block' id=${element.id}>` + element.name + `</a>`)
+                    // for each button this step creates a click event 
+                    var events = response.data.forEach((element) => document.getElementById(element.id).addEventListener('click', ev => {
+                        // this is an api call i did not get a chance to try out but it should work... 
+
+                        // FB.api(
+                        //     `${element.id}/insights?metric=page_consumptions,page_post_engagements`,
+                        //     function (response) {
+                        //         if (response && !response.error) {
+                        //             console.log(response)
+                        //         }
+                        //     }
+                        // );
+                        document.getElementById('main').innerHTML = `<h3>Your page name is : ${element.name}  with ${element.fan_count} likes and ${element.page_consumptions}</h3>` +
+                            `<form method="post" enctype="multipart/form-data">{% csrf_token %}` +
+                            `<textarea rows=3 cols=30 id=caption_${element.id} name='caption' ></textarea>` +
+                            `<input type='file' name='meme' id=meme_${element.id} name='meme'>` +
+                            `<input type='submit' value='post on your page' id=submit_${element.id}>` +
+                            `</form>`
+                        // leave it as it is. it submits images to the facebook api and shares it and returns the info of the post
+                            document.getElementById(`submit_${element.id}`).addEventListener('click', ev => {
+                            ev.preventDefault()
+                            const fileReader = new FileReader();
+                            const file = document.getElementById(`meme_${element.id}`).files[0];
+                            var caption = document.getElementById(`caption_${element.id}`).value
+                            fileReader.onloadend = async () => {
+                                const photoData = new Blob([fileReader.result], { type: 'image/jpg' });
+                                const formData = new FormData();
+
+                                formData.append('access_token', element.access_token);
+                                formData.append('source', photoData);
+                                formData.append('message', caption);
+                                let response = await fetch(`https://graph.facebook.com/${element.id}/photos`, {
+                                    body: formData,
+                                    method: 'post'
+                                })
+                                response = await response.json()
+                                myArray = JSON.stringify(response);
+                                alert(myArray);
+                                document.getElementById(`meme_${element.id}`).value = ''
+                                document.getElementById(`caption_${element.id}`).value = ''
+                            };
+                            fileReader.readAsArrayBuffer(file);
+
+                        })
+                    })
+
+                    )
+
+                })
+        }
+
+    }
+
+// ignore this it just loads the page async so its faster. 
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) { return; }
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+</script>
+
